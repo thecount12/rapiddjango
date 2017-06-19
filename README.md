@@ -15,8 +15,8 @@ the script are as follows:
 
 # Why Did I Create this
 
-Django is relatively easy to setup and configure. However I was tired of 
-creating the same features for each new website I create. Nearly everyone
+Django is relatively easy to setup and configure, but I got tired of 
+creating the same features for every new website I create. Nearly everyone
 needs the six items I listed above. This script saves several hours of work and gives me the opportunity to create a new model specific for the customer and allows me to begin working on a flexible front end that can be changed easily. 
 
 # Prerequisites
