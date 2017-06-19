@@ -107,5 +107,20 @@ class Post(models.Model):
 The SQL command for the method listed above is as follows:
 
 ```
-CREATE TABLE "blog_post" ("id", integer NOT NULL PRIMARY KEY AUTOCREMENT,"title" varchar(60) NOT NULL, "body" text NOT NULL,); 
+CREATE TABLE "blog_post" ("id", integer NOT NULL PRIMARY KEY AUTOCREMENT,
+"title" varchar(60) NOT NULL, "body" text NOT NULL,); 
 ```
+
+# Next Steps
+
+If you are new to python or new to django. Please Buy My book at http://www.rapidpythonprogramming.com
+
+If you would like to create a blog from scratch or the signup from scratch. Take a look at the following example file templates. You can use the example
+to create other models or application tools. 
+
+1. StaticFlatFile
+2. Blog
+3. Sign
+
+
+
