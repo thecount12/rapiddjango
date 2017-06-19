@@ -36,19 +36,19 @@ If you run Python3.x. You need to edit the file and change the following:
 
 At the bottom of newrapidsetup.py
 
-Change -
-```project=raw\_input("Enter your Django Project Name: ")```
+change: 
+```project=raw_input("Enter your Django Project Name: ")```
 
-To - 
-project=input("Enter your Django Project Name: ")
+To:  
+```project=input("Enter your Django Project Name: ")```
 
 Near the top of mystring.py
 
-change - 
-myclean=raw\_input("Enter name of project to erease: ")
+change:  
+```myclean=raw_input("Enter name of project to erease: ")```
 
-To -
-myclean=input("Enter name of project to erase: ")
+To: 
+```myclean=input("Enter name of project to erase: ")```
 
 
 # Running the Script
@@ -92,20 +92,20 @@ verbose SQL statements.
 
 Creating a view without a model is simple. The basicapp that comes with 
 this script shows an example of a view: 
-	def index(request):
-		return render_to_response("index.html")
+'''def index(request):
+	return render_to_response("index.html")
+'''
 
 This method uses render\_to\_response library to point to a template index.html
 
-Very simple
-
 The model.py however is a simplified script that abstracts the creating of SQL statements. Example:
-
+'''
 class Post(models.Model):
 	title=models.CharField(max_length=60)
 	body=models.TextField()
-
+'''
 
 The SQL command for the method listed above is as follows:
-CREATE TABLE "blog\_post" ("id", integer NOT NULL PRIMARY KEY AUTOCREMENT,"title" varchar(60) NOT NULL, "body" text NOT NULL,); 
- 
+'''
+CREATE TABLE "blog_post" ("id", integer NOT NULL PRIMARY KEY AUTOCREMENT,"title" varchar(60) NOT NULL, "body" text NOT NULL,); 
+''' 
