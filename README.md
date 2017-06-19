@@ -96,7 +96,7 @@ def index(request):
 
 This method uses render\_to\_response library to point to a template index.html
 
-The model.py however is a simplified script that abstracts the creating of SQL statements. Example:
+The model.py however is a simplified script that abstracts the creation of SQL statements. Example:
 
 ```
 class Post(models.Model):
