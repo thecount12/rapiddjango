@@ -37,7 +37,7 @@ If you run Python3.x. You need to edit the file and change the following:
 At the bottom of newrapidsetup.py
 
 Change -
-'''project=raw\_input("Enter your Django Project Name: ")'''
+```project=raw\_input("Enter your Django Project Name: ")```
 
 To - 
 project=input("Enter your Django Project Name: ")
