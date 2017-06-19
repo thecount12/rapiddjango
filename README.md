@@ -89,7 +89,8 @@ verbose SQL statements.
 Creating a view without a model is simple. The basicapp that comes with 
 this script shows an example of a view: 
 
-```def index(request):
+```
+def index(request):
 	return render_to_response("index.html")
 ```
 
