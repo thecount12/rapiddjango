@@ -72,5 +72,40 @@ for the first time.
 
 Now visit the website using your browser: http://127.0.0.1:8000
 
- 
+Explore the site. You can add users, add news, and add comments. Currently
+you have to be 'staff' to add news. As an administrator you can specify if the 
+user or can have access to the blog model. 
 
+Only users can add comments. This forces new users to sign up. The administrator specifies if the post comment is authorized or not.
+
+Currently Blog posts can be added only through the admin tool. And news 
+comments can be added using the admin tool or the form. 
+
+You can create the same form for the news blog that appears the same for 
+the comments form. It's a matter of creating, a new url, a new view method,
+a new form method, and a new template. 
+
+# New Models
+
+Creating new models (database content) rapidly is the power of Django's ORM (Object Relational Mapper). If you know python you can write python instead of
+verbose SQL statements. 
+
+Creating a view without a model is simple. The basicapp that comes with 
+this script shows an example of a view: 
+	def index(request):
+		return render_to_response("index.html")
+
+This method uses render\_to\_response library to point to a template index.html
+
+Very simple
+
+The model.py however is a simplified script that abstracts the creating of SQL statements. Example:
+
+class Post(models.Model):
+	title=models.CharField(max_length=60)
+	body=models.TextField()
+
+
+The SQL command for the method listed above is as follows:
+CREATE TABLE "blog\_post" ("id", integer NOT NULL PRIMARY KEY AUTOCREMENT,"title" varchar(60) NOT NULL, "body" text NOT NULL,); 
+ 
