@@ -76,8 +76,11 @@ You will need to run the server first: python manage.py runserver
 
 After you log in click the blog and add new sample entries. 
 
-# View
+# View 
 
+
+## ListView
+ 
 Change directory that contains the settings.py file and add the following to urls.py:
 
 ```
@@ -139,7 +142,7 @@ Within the blog/ directory you will need to create /templates/blog/post_list.htm
 {% endblock %}
 
 
-You can also add the following below for pagination of articles. As lost as its between 'block content and endblock'
+You can also add the following below for pagination of articles. As long as its between block content and endblock.
 
 ```
 {% if is_paginated %}
@@ -152,8 +155,10 @@ You can also add the following below for pagination of articles. As lost as its 
         {% endif %}
 {% endif %}
 ```
-                
-# DetailView 
+               
+vist http://127.0.0.1/blog
+ 
+## DetailView 
 
 Add the followin to views:
 
