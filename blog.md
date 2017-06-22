@@ -194,7 +194,7 @@ Add the following to templates/blog/post_detail.html
 
 You should now be able to visit the detail view of the blog
 
-## Comments
+# Comments
 
 ```
 class Comment(models.Model):
