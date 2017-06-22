@@ -160,7 +160,7 @@ vist http://127.0.0.1/blog
  
 ## DetailView 
 
-Add the followin to views:
+Add the following to views:
 
 ```
 from django.views.generic.detail import DetailView
@@ -172,7 +172,6 @@ Add the following to blog/urls.py
 
 ```
 from blog.views import PostDetailView
-
 	url(r'^(?P<pk>\d+)/$',PostDetailView.as_view(), name='post-detail'),
 ```
 
@@ -193,10 +192,11 @@ Add the following to templates/blog/post_detail.html
 {% endblock %}
 ```
 
+You should now be able to visit the detail view of the blog
 
+## Comments
 
-##############comments###################
-
+```
 class Comment(models.Model):
         created = models.DateTimeField(auto_now_add=True)
         author=models.CharField(default='author',max_length=60)
@@ -206,21 +206,17 @@ class Comment(models.Model):
         post=models.ForeignKey('blog.post', related_name='comments')
         approved_comment=models.BooleanField(default=False)
 
-        '''
-        def approve(self):
-                self.approved_comment=True
-                self.save()
-
-        def get_absolute_url(self):
-                return reverse('postcomment',kwargs={'pk':self.pk})
-        '''
         def __unicode__(self):
                 return unicode("%s: %s" % (self.post,self.body[:60]))
+```
 
-#### migrate
-# python manage.py makemigrations; python manage.py migrate
 
-####admin.py
+## migrate comments
+python manage.py makemigrations; python manage.py migrate
+
+## admin.py
+
+```
 from blog.models import Comment
 
 class CommentAdmin(admin.ModelAdmin):
@@ -230,21 +226,24 @@ class CommentAdmin(admin.ModelAdmin):
         search_fields=["post_name"]
 admin.site.register(Comment,CommentAdmin)
 # test the form
+```
 
-####forms.py
+Test the new model in admin
 
+## forms.py
 
-
+```
 from django import forms
 from blog.models import Comment
 class PostComment(forms.ModelForm):
         class Meta:
                 model=Comment
                 fields = ['author','body',]
-                                                    
+```                                                 
 
-####views.py####
+## views.py
 
+```
 from django.shortcuts import get_object_or_404, redirect
 from blog.forms import PostComment
 
@@ -261,22 +260,19 @@ def PostCommentView(request,pk):
         else:
                 form = PostComment()
         return render(request, 'postcomment.html',{'form':form})
+```
 
-'''
-def comment_approve(request,pk):
-    comment = get_object_or_404(Comment,pk=pk)
-    #comment.approve()
-    return redirect('post_detail', pk=post.pk)
-'''
 
-###urls.py
+## urls.py
 
+```
 from blog.views import PostCommentView
 url(r'^(?P<pk>\d+)/comment/$',PostCommentView,name='postcomment'),
+```
 
+## postcomment.html in root template not in blog directory
 
-###postcomment.html#### go's in root template
-
+```
 {% extends 'base.html' %}
 {% block content %}
 
@@ -287,17 +283,14 @@ url(r'^(?P<pk>\d+)/comment/$',PostCommentView,name='postcomment'),
 </form>
 
 {% endblock %}
-
-# notes to add later
-#<a href="{% url 'postcomment' pk=5 %} ">blah</a>
-#{% url 'post-detail' pk=5 %}
-#<p>{{ request.path}}</p>
-
-# test the form
-
-####post-detail.html#### add comments
+```
 
 
+## test the form
+
+post-detail.html 
+
+```
 <h2>Comments:</h2>
 
 {% for comment in post.comments.all %}
@@ -305,38 +298,51 @@ url(r'^(?P<pk>\d+)/comment/$',PostCommentView,name='postcomment'),
         <br>Comment: {{ comment.body}}</p>
         <p></p>
 {% endfor %}
+```
 
 
-##########user integrations #############
+# user integrations 
 
-# views.py
+## views.py
 
+Adjust PostCommentView and add the 3 statements below in the appropriate place
+
+```
 from django.contrib.auth.models import User
-
 in PostCommentView()
 	user=User.objects.get(pk=pk)
 	print user.last_name
-
 	comment.author=user
+```
+## models.py
 
-# models.py
+You can adjust the model and change the ForeignKey to user. However this will alter the
+table. You will need to run the migrate command again
+python manage.py makemigrations
+python manage.py migrate
+python manage.py sqlmigrate blog 0001 or use the appropriate item in number 000x. You 
+can find the results of the alter query in migrations directory /blog/migrations
 
 author.models.ForeignKey('author.User')
 
-# forms.py
+## forms.py
 
 remove 'author' from the form
-
 its possible you could also exclude=['author']
 
 
-#control by relation of Profile
+## control by relation of Profile
+
+You might need to import Profile into the view. 
+
+```
 myedit=Profile.object.get(user=user)
 print myedit.editor # this should be True or False
 print myedit.user_id # this should be number value 1 or 2 for first 2 users
+```
 
-
-# control approved comments
+## control approved comments
+```
  {% if user.is_authenticated or comment.approved_comment %}
-
+```
 
