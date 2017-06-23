@@ -1,5 +1,6 @@
 # first add signup to settings.py 
 
+Check blog.md for detail information about the flow of creating new models. 
 
 ## root urls.py 
 
