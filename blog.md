@@ -1,5 +1,7 @@
 # How to add a blog from scratch
 
+Use this as a template to create other models. The example below will show you how to create a blog from scratch. 
+
 Creating any model is a simple 5 step process 
 
 
