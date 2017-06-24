@@ -17,7 +17,7 @@ the script are as follows:
 
 Django is relatively easy to setup and configure, but I got tired of 
 creating the same features for every new website I create. Nearly everyone
-needs the six items I listed above. This script saves several hours of work and gives me the opportunity to create a new model specific for the customer and allows me to begin working on a flexible front end that can be changed easily. 
+needs the six items I listed above. This script saves several hours of work and gives you the opportunity to create a new model specific for the customer and allows you to begin working on a flexible front end that can be changed easily. 
 
 # Prerequisites
 
