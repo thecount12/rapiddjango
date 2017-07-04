@@ -149,7 +149,7 @@ You can also add the following below for pagination of articles. As long as its 
 ```
 {% if is_paginated %}
         {% if page_obj.has_previous %}
-        <a href="/blog?page={{ page_obj.previous_page_number }}
+        <a href="/blog?page={{ page_obj.previous_page_number }}">prev</a>
         {% endif %}
         Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
         {% if page_obj.has_next %}
