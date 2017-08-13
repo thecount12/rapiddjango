@@ -112,4 +112,28 @@ truncates the template model by 9 characters.
 {{ value|truncatechars:9 }}
 
 
+Settings.py correct settings for static_files
+
+```
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TEMPLATE_DIR=os.path.join(BASE_DIR,'templates')
+STATIC_DIR=os.path.join(BASE_DIR,'static')
+MEDIA_DIR=os.path.join(BASE_DIR,'media')
+LOGIN_REDIRECT_URL='/'
+
+STATICFILES_DIRS=(
+        os.path.join(BASE_DIR,'static'),
+)
+
+DEBUG = True 
+
+ALLOWED_HOSTS = ['*']
+
+SITE_ID = 1 
+
+STATIC_URL='/static/'
+STATIC_ROOT='staticfiles'
+MEDIA_ROOT=MEDIA_DIR
+MEDIA_URL='/media/'
+```
 
