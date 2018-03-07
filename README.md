@@ -1,4 +1,4 @@
-# Rapid Django Web Services
+# Rapid Django Web Services.
 
 Rapid Django Web Services is a custom script that you can run on Windows
 Linux or Mac OSX. The script creates a fully functional website complete
