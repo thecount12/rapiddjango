@@ -10,29 +10,30 @@ import os
 import shutil
 from mystring import *
 
+
 class Rapid(object):
     """
     class to install blog, poll, protected pages, signup etc...
     """
 
     def __init__(self, bootstrap, indexdata, logindata, basicview, zclean, project, rooturl, setpath, seturl, setapp, rooturlimport):
-        self.bootstrap = bootstrap
-        self.indexdata = indexdata
-        self.logindata = logindata
-        self.basicview = basicview
-        self.zclean = zclean
+        self.boot_strap = bootstrap
+        self.index_data = indexdata
+        self.login_data = logindata
+        self.basic_view = basicview
+        self.z_clean = zclean
         self.project = project
-        self.rooturl = rooturl
+        self.root_url = rooturl
         self.setpath = setpath
-        self.seturl = seturl
-        self.setapp = setapp
-        self.rooturlimport = rooturlimport
+        self.set_url = seturl
+        self.set_app = setapp
+        self.root_url_import = rooturlimport
 
-    def Project(self):
+    def project_create(self):
         # Create Django Project
         subprocess.call(['django-admin', 'startproject', self.project])
 
-    def BasicApp(self):
+    def basic_app(self):
         # Create Django Main root page
         subprocess.call(['django-admin', 'startapp', 'basicapp'], cwd=self.project)
         mpath = self.project+"/"+"basicapp/templates"
@@ -41,17 +42,17 @@ class Rapid(object):
         # write views.py for basicapp basicview
         myview = self.project+"/basicapp/views.py"
         with open(myview, 'a') as file:
-            file.write(self.basicview)
+            file.write(self.basic_view)
         # write index.html for basicapp indexdata
         myindex = self.project+"/basicapp/templates/index.html"
         with open(myindex, 'w') as f:
-            f.write(self.indexdata)
+            f.write(self.index_data)
         # write base.html for basicapp bootstrap
         base = self.project+"/basicapp/templates/base.html"
         with open(base, 'w') as b:
-            b.write(self.bootstrap)
+            b.write(self.boot_strap)
 
-    def Signup(self):
+    def signup(self):
         # Create signup app
         subprocess.call(['django-admin', 'startapp', 'signup'], cwd=self.project)
         mpath = self.project+"/"+"signup/templates"
@@ -153,7 +154,7 @@ def update_user_profile(sender, instance, created, **kwargs):
         # write base.html for signup view
         base = self.project+"/signup/templates/base.html"
         with open(base, 'w') as b:
-            b.write(self.bootstrap)
+            b.write(self.boot_strap)
         # write admin.py for signup view
         adminstuff = self.project+"/signup/admin.py"
         admindata = """
@@ -172,7 +173,7 @@ admin.site.register(User,ProfAdmin)
         with open(adminstuff, 'a') as adm:
             adm.write(admindata)
 
-    def Blog(self):
+    def blog(self):
         # Create Django Blog
         subprocess.call(['django-admin', 'startapp', 'blog'], cwd=self.project)
         mpath = self.project+"/"+"blog/templates/blog"
@@ -211,12 +212,12 @@ admin.site.register(User,ProfAdmin)
         with open(mypostcomment, 'w') as file:
             file.write(postcomment)
 
-    def Clean(self):
+    def clean(self):
         # create clean.py utility for cleanup all files
         with open('clean.py', 'w') as file:
-            file.write(self.zclean)
+            file.write(self.z_clean)
 
-    def URL(self):
+    def url(self):
         # Login / Logout function
         mpath = self.project + "/" + self.project + "/" + "urls.py"
         newpath = self.project + "/" + self.project + "/" + "test.dat"
@@ -228,9 +229,9 @@ admin.site.register(User,ProfAdmin)
             for i in f:
                 ar.append(i)
                 if 'import admin' in i:
-                    ar.append(self.rooturlimport)
+                    ar.append(self.root_url_import)
                 if 'urlpatterns =' in i:
-                    ar.append(self.rooturl)
+                    ar.append(self.root_url)
         # print ar # debug only
         print("Adjusted URLS for login Apps: %s" % mpath)
         # write rooturlimport and rooturls to the root urls.py
@@ -241,7 +242,7 @@ admin.site.register(User,ProfAdmin)
                 else:
                     w.write(z)
 
-    def Settings(self):
+    def settings(self):
         # basic setup for settings
         mpath = self.project + "/" + self.project + "/" + "settings.py"
         newpath = self.project + "/" + self.project + "/" + "test.set"
@@ -256,9 +257,9 @@ admin.site.register(User,ProfAdmin)
                     fix = i.replace("'DIRS': [],","'DIRS': [TEMPLATE_DIR],")
                     ar.append(fix)
                 elif 'STATIC_URL =' in i:
-                    ar.append(self.seturl)
+                    ar.append(self.set_url)
                 elif 'django.contrib.staticfiles' in i: # create apps before adding
-                    ar.append(self.setapp)
+                    ar.append(self.set_app)
                 else:
                     ar.append(i)
         # write settings.py need setpath,seturl and setapp from global
@@ -273,21 +274,21 @@ admin.site.register(User,ProfAdmin)
         # write login.html in registration logindata
         loginFile = self.project+"/templates/registration/login.html"
         with open(loginFile,"w") as loginT:
-            loginT.write(self.logindata)
+            loginT.write(self.login_data)
         # write base.html below registration bootstrap
         bootFile = self.project+"/templates/base.html"
         with open(bootFile, "w") as bootT:
-            bootT.write(bootstrap)
+            bootT.write(self.boot_strap)
         print("Adjusted features for settings: %s" % mpath)
 
     def run(self):
-        self.Clean()
-        self.Project()
-        self.Signup()
-        self.BasicApp()
-        self.URL()
-        self.Settings()
-        self.Blog()
+        self.clean()
+        self.project_create()
+        self.signup()
+        self.basic_app()
+        self.url()
+        self.settings()
+        self.blog()
 
 
 if __name__ == "__main__":
