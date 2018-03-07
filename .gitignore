@@ -4,3 +4,6 @@ clean.py
 createapp.py
 europarse.py
 sign.txt
+__pycache__/
+cool/
+
