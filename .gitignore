@@ -1,9 +1,4 @@
-StaticFlatFile.txt
-blog.txt
-clean.py
-createapp.py
-europarse.py
-sign.txt
+*.idea/*
+*.pyc
 __pycache__/
-cool/
 
