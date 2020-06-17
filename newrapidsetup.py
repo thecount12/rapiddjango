@@ -78,7 +78,7 @@ class Rapid(object):
         view = self.project+"/signup/views.py"
         signup_view = """
 from django.contrib.auth import login, authenticate
-from django.shortcuts import render, redirect, render_to_response
+from django.shortcuts import render, redirect 
 from signup.forms import SignUpForm
 
 
@@ -101,6 +101,7 @@ def Signup(request):
 
 def thanks(request):
     return render(None, "thanks.html")
+
         """
         self.write_data('a', view, signup_view)
         my_form = self.project+"/signup/forms.py"
