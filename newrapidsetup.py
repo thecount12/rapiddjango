@@ -16,7 +16,10 @@ class Rapid(object):
     class to install blog, poll, protected pages, signup etc...
     """
 
-    def __init__(self, bootstrap, indexdata, logindata, basicview, zclean, project, rooturl, setpath, seturl, setapp, rooturlimport):
+    def __init__(self, bootstrap, indexdata,
+                 logindata, basicview, zclean,
+                 project, rooturl, setpath,
+                 seturl, setapp, rooturlimport):
         self.boot_strap = bootstrap
         self.index_data = indexdata
         self.login_data = logindata
@@ -29,66 +32,80 @@ class Rapid(object):
         self.set_app = setapp
         self.root_url_import = rooturlimport
 
+    def write_data(self, type, data_file, data_object):
+        """
+        File Handler
+        :param type: str() a append or w write
+        :param data_file: str() of file to write
+        :param data_object:
+        :return: None
+        """
+        with open(data_file, type) as file:
+            file.write(data_object)
+
     def project_create(self):
-        # Create Django Project
+        """
+        start project
+        :return: None
+        """
         subprocess.call(['django-admin', 'startproject', self.project])
 
     def basic_app(self):
-        # Create Django Main root page
+        """
+        Create Django Main root page
+        :return: None
+        """
         subprocess.call(['django-admin', 'startapp', 'basicapp'], cwd=self.project)
-        mpath = self.project+"/"+"basicapp/templates"
-        if not os.path.exists(mpath):
-            os.makedirs(mpath)
-        # write views.py for basicapp basicview
-        myview = self.project+"/basicapp/views.py"
-        with open(myview, 'a') as file:
-            file.write(self.basic_view)
-        # write index.html for basicapp indexdata
-        myindex = self.project+"/basicapp/templates/index.html"
-        with open(myindex, 'w') as f:
-            f.write(self.index_data)
-        # write base.html for basicapp bootstrap
+        my_path = self.project+"/"+"basicapp/templates"
+        if not os.path.exists(my_path):
+            os.makedirs(my_path)
+        view = self.project+"/basicapp/views.py"
+        self.write_data('a', view, self.basic_view)
+        index = self.project+"/basicapp/templates/index.html"
+        self.write_data('w', index, self.index_data)
         base = self.project+"/basicapp/templates/base.html"
-        with open(base, 'w') as b:
-            b.write(self.boot_strap)
+        self.write_data('w', base, self.boot_strap)
 
     def signup(self):
-        # Create signup app
+        """
+        Create signup app
+        :return: None
+        """
         subprocess.call(['django-admin', 'startapp', 'signup'], cwd=self.project)
-        mpath = self.project+"/"+"signup/templates"
-        if not os.path.exists(mpath):
-            os.makedirs(mpath)
-        # write views.py for basic signup view
-        myview = self.project+"/signup/views.py"
-        signupview = """
+        my_path = self.project+"/"+"signup/templates"
+        if not os.path.exists(my_path):
+            os.makedirs(my_path)
+        view = self.project+"/signup/views.py"
+        signup_view = """
 from django.contrib.auth import login, authenticate
-from django.shortcuts import render, redirect, render_to_response
+from django.shortcuts import render, redirect 
 from signup.forms import SignUpForm
+
 
 def Signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-                user = form.save()
-                user.refresh_from_db()  # load the profile instance created by the signal
-                user.profile.birth_date = form.cleaned_data.get('birth_date')
-                user.save()
-                raw_password = form.cleaned_data.get('password1')
-                user = authenticate(username=user.username, password=raw_password)
-                login(request, user)
-                return redirect('/thanks/')
+            user = form.save()
+            user.refresh_from_db()  # load the profile instance created by the signal
+            user.profile.birth_date = form.cleaned_data.get('birth_date')
+            user.save()
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=user.username, password=raw_password)
+            login(request, user)
+            return redirect('/thanks/')
     else:
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
 
+
 def thanks(request):
-    return render_to_response("thanks.html")
+    return render(None, "thanks.html")
+
         """
-        with open(myview, 'a') as file:
-            file.write(signupview)
-        # write forms.py for basic signup view
-        myform = self.project+"/signup/forms.py"
-        signform = """
+        self.write_data('a', view, signup_view)
+        my_form = self.project+"/signup/forms.py"
+        sign_form = """
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -100,12 +117,10 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ('username', 'birth_date', 'password1', 'password2', )
         """
-        with open(myform, 'a') as sform:
-            sform.write(signform)
- 
-        # write signup.html for basic signup view
-        myindex = self.project+"/signup/templates/signup.html"
-        signindex = """
+        self.write_data('a', my_form, sign_form)
+
+        my_index = self.project+"/signup/templates/signup.html"
+        sign_index = """
 {% extends 'base.html' %}
 {% block content %}
   <h2>Sign up</h2>
@@ -116,21 +131,17 @@ class SignUpForm(UserCreationForm):
   </form>
 {% endblock %}
         """
-        with open(myindex, 'w') as f:
-            f.write(signindex)
-        # write thanks.html for misc views
-        mythanks = self.project+"/signup/templates/thanks.html"
-        thanksindex = """
+        self.write_data('w', my_index, sign_index)
+        my_thanks = self.project+"/signup/templates/thanks.html"
+        thanks_index = """
 {% extends 'base.html' %}
 {% block content %}
 <p>Thanks. Your information has been added.</p>
 {% endblock %}
         """
-        with open(mythanks, 'w') as g:
-            g.write(thanksindex)
-        # model for signup
-        mymodel = self.project+"/signup/models.py"
-        signmodel = """
+        self.write_data('w', my_thanks, thanks_index)
+        my_model = self.project+"/signup/models.py"
+        sign_model = """
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -143,99 +154,86 @@ class Profile(models.Model):
     editor = models.NullBooleanField(blank=True)
     subscriber= models.NullBooleanField(blank=True)
 
+
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
     instance.profile.save()
         """
-        with open(mymodel, 'a') as smodel:
-            smodel.write(signmodel)
-        # write base.html for signup view
+        self.write_data('a', my_model, sign_model)
         base = self.project+"/signup/templates/base.html"
-        with open(base, 'w') as b:
-            b.write(self.boot_strap)
-        # write admin.py for signup view
-        adminstuff = self.project+"/signup/admin.py"
-        admindata = """
+        self.write_data('w', base, self.boot_strap)
+        admin_stuff = self.project+"/signup/admin.py"
+        admin_data = """
 from signup.models import Profile
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
 class ProfInline(admin.StackedInline):
     model=Profile
+
 class ProfAdmin(admin.ModelAdmin):
     inlines = (ProfInline,)
+
 
 admin.site.unregister(User)
 admin.site.register(User,ProfAdmin)
         """
-        with open(adminstuff, 'a') as adm:
-            adm.write(admindata)
+        self.write_data('a', admin_stuff, admin_data)
 
     def blog(self):
+        """
+        Creates blog views, forms, model, admin and html files
+        :return: None
+        """
         # Create Django Blog
         subprocess.call(['django-admin', 'startapp', 'blog'], cwd=self.project)
-        mpath = self.project+"/"+"blog/templates/blog"
-        if not os.path.exists(mpath):
-            os.makedirs(mpath)
-        # write views.py for blog blogview
-        myview = self.project+"/blog/views.py"
-        with open(myview, 'a') as file:
-            file.write(blogviews)
-        # write models.py for blog blogmodel
-        mymodel = self.project+"/blog/models.py"
-        with open(mymodel, 'a') as file:
-            file.write(blogmodel)
-        # write admin.py for blog blogadmin
-        myadmin = self.project+"/blog/admin.py"
-        with open(myadmin, 'a') as file:
-            file.write(blogadmin)
-        # write forms.py for blog blogforms
-        myforms = self.project+"/blog/forms.py"
-        with open(myforms, 'w') as file:
-            file.write(blogforms)
-        # write urls.py for blog blogurls
-        myurls = self.project+"/blog/urls.py"
-        with open(myurls, 'a') as file:
-            file.write(blogurls)
-        # post_list.html for blog post_list
-        mypostlist = self.project+"/blog/templates/blog/post_list.html"
-        with open(mypostlist, 'w') as file:
-            file.write(postlist)
-        # post_detail.html for blog post_detail
-        mypostdetail = self.project+"/blog/templates/blog/post_detail.html"
-        with open(mypostdetail, 'w') as file:
-            file.write(postdetail)
-        # postcomment.html for blog in root templates
-        mypostcomment = self.project+"/templates/postcomment.html"
-        with open(mypostcomment, 'w') as file:
-            file.write(postcomment)
+        my_path = self.project+"/"+"blog/templates/blog"
+        if not os.path.exists(my_path):
+            os.makedirs(my_path)
+        view = self.project+"/blog/views.py"
+        self.write_data('a', view, blogviews)
+        model = self.project+"/blog/models.py"
+        self.write_data('a', model, blogmodel)
+        admin = self.project+"/blog/admin.py"
+        self.write_data('a', admin, blogadmin)
+        forms = self.project+"/blog/forms.py"
+        self.write_data('w', forms, blogforms)
+        urls = self.project+"/blog/urls.py"
+        self.write_data('a', urls, blogurls)
+        my_post_list = self.project+"/blog/templates/blog/post_list.html"
+        self.write_data('w', my_post_list, post_list)
+        my_post_detail = self.project+"/blog/templates/blog/post_detail.html"
+        self.write_data('w', my_post_detail, post_detail)
+        my_post_comment = self.project+"/templates/postcomment.html"
+        self.write_data('w', my_post_comment, post_comment)
 
     def clean(self):
-        # create clean.py utility for cleanup all files
-        with open('clean.py', 'w') as file:
-            file.write(self.z_clean)
+        """
+        Script to create clean.py for maintenance push
+        :return: None
+        """
+        self.write_data('w', 'clean.py', self.z_clean)
 
     def url(self):
-        # Login / Logout function
-        mpath = self.project + "/" + self.project + "/" + "urls.py"
-        newpath = self.project + "/" + self.project + "/" + "test.dat"
-        shutil.move(mpath, newpath)
+        """
+        Login and Logout function
+        :return: None
+        """
         ar = []
-        # newimport = "from django.contrib.auth import views as auth_views\nimport basicapp.views\n\n"
-        # read urls.py
-        with open(newpath, 'r') as f:
+        my_path = self.project + "/" + self.project + "/" + "urls.py"
+        new_path = self.project + "/" + self.project + "/" + "test.dat"
+        shutil.move(my_path, new_path)
+        with open(new_path, 'r') as f:
             for i in f:
                 ar.append(i)
                 if 'import admin' in i:
                     ar.append(self.root_url_import)
                 if 'urlpatterns =' in i:
                     ar.append(self.root_url)
-        # print ar # debug only
-        print("Adjusted URLS for login Apps: %s" % mpath)
-        # write rooturlimport and rooturls to the root urls.py
-        with open(mpath, 'a') as w:
+        print("Adjusted URLS for login Apps: %s" % my_path)
+        with open(my_path, 'a') as w:
             for z in ar:
                 if z[:4] == '    ':
                     w.write("\t" + z[4:])
@@ -243,45 +241,46 @@ admin.site.register(User,ProfAdmin)
                     w.write(z)
 
     def settings(self):
-        # basic setup for settings
-        mpath = self.project + "/" + self.project + "/" + "settings.py"
-        newpath = self.project + "/" + self.project + "/" + "test.set"
-        shutil.move(mpath, newpath)
+        """
+        Modify settings.py
+        :return: None
+        """
         ar = []
-        # read settings.py
-        with open(newpath, 'r') as f:
+        my_path = self.project + "/" + self.project + "/" + "settings.py"
+        new_path = self.project + "/" + self.project + "/" + "test.set"
+        shutil.move(my_path, new_path)
+        with open(new_path, 'r') as f:
             for i in f:
                 if 'os.path.abspath' in i:
                     ar.append(self.setpath)
                 elif 'DIRS' in i:
-                    fix = i.replace("'DIRS': [],","'DIRS': [TEMPLATE_DIR],")
+                    fix = i.replace("'DIRS': [],", "'DIRS': [TEMPLATE_DIR],")
                     ar.append(fix)
                 elif 'STATIC_URL =' in i:
                     ar.append(self.set_url)
-                elif 'django.contrib.staticfiles' in i: # create apps before adding
+                elif 'django.contrib.staticfiles' in i:  # create apps before adding
                     ar.append(self.set_app)
                 else:
                     ar.append(i)
-        # write settings.py need setpath,seturl and setapp from global
-        with open(mpath, 'a') as w:
+        with open(my_path, 'a') as w:
             for z in ar:
                 w.write(z)
 
-        bpath = self.project+"/"+"templates"
-        if not os.path.exists(bpath):
-            os.makedirs(bpath)
-            os.makedirs(bpath+"/registration")
-        # write login.html in registration logindata
-        loginFile = self.project+"/templates/registration/login.html"
-        with open(loginFile,"w") as loginT:
-            loginT.write(self.login_data)
-        # write base.html below registration bootstrap
-        bootFile = self.project+"/templates/base.html"
-        with open(bootFile, "w") as bootT:
-            bootT.write(self.boot_strap)
-        print("Adjusted features for settings: %s" % mpath)
+        b_path = self.project+"/"+"templates"
+        if not os.path.exists(b_path):
+            os.makedirs(b_path)
+            os.makedirs(b_path+"/registration")
+        login_file = self.project+"/templates/registration/login.html"
+        self.write_data('w', login_file, self.login_data)
+        boot_file = self.project+"/templates/base.html"
+        self.write_data('w', boot_file, self.boot_strap)
+        print("Adjusted features for settings: %s" % my_path)
 
     def run(self):
+        """
+        Main
+        :return: None
+        """
         self.clean()
         self.project_create()
         self.signup()
@@ -293,7 +292,17 @@ admin.site.register(User,ProfAdmin)
 
 if __name__ == "__main__":
     project = input("Enter your Django Project Name: ")
-    newsite = Rapid(bootstrap, indexdata, logindata, basicview, zclean, project, rooturl, setpath, seturl, setapp, rooturlimport)
-    newsite.run()
+    new_site = Rapid(bootstrap,
+                     indexdata,
+                     logindata,
+                     basicview,
+                     zclean,
+                     project,
+                     rooturl,
+                     setpath,
+                     seturl,
+                     setapp,
+                     rooturlimport)
+    new_site.run()
 
 

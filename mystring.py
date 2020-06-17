@@ -5,7 +5,7 @@
 # http://www.rapidpythonprogramming
 
 
-bootstrap="""
+bootstrap = """
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -77,7 +77,7 @@ bootstrap="""
 </html>
 """
 
-indexdata="""
+indexdata = """
 {% extends 'base.html' %}
 {% block content %}
 <h2>Body Content</h2>
@@ -86,7 +86,7 @@ indexdata="""
 {% endblock %}
 """
 
-logindata="""
+logindata = """
 {% extends 'base.html' %}
 {% block title %}Login{% endblock %}
 {% block content %}
@@ -99,42 +99,48 @@ logindata="""
 {% endblock %}
 """
 
-basicview="""
-from django.shortcuts import render_to_response
+basicview = """
+from django.shortcuts import render
+
 
 def index(request):
-	return render_to_response("index.html")
+    return render(None, "index.html")
 """
 
 zclean = """
-import os, shutil
+import os
+import shutil
+
+
 def clean():	
-	myclean=raw_input("Enter name of project to erase: ")
-	if os.path.exists(myclean):
-		print ("erasing directory")
-		shutil.rmtree(myclean)		
+    my_clean = input("Enter name of project to erase: ")
+    if os.path.exists(my_clean):
+        print("erasing directory")
+        shutil.rmtree(my_clean)
+
+
 clean()
 """
 
-rooturlimport="""from django.contrib.auth import views as auth_views
+rooturlimport = """from django.contrib.auth import views as auth_views
 from django.conf.urls import include
 import basicapp.views 
 import signup.views
 """
 
-rooturl="""
-	url(r'^accounts/login/$', auth_views.login, name = 'login'), 
-	#url(r'^logout/$', auth_views.logout, name = 'logout'),# builtin 
-	#url(r'^logout/$', auth_views.logout, {'template_name': 'logged_out.html'}, name = 'logout'),# page redirect 
-	url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name = 'logout'),
-	url(r'^$',basicapp.views.index), 
-	url(r'^signup/$',signup.views.Signup), 
-	url(r'^thanks/$',signup.views.thanks), 
-	url(r'^blog/',include('blog.urls')), 
+rooturl = """
+    path('accounts/login/', auth_views.LoginView.as_view()), 
+    # url('logout/', auth_views.logout, name = 'logout'),# builtin 
+    # url('logout/', auth_views.logout, {'template_name': 'logged_out.html'}, name = 'logout'),# page redirect 
+    path('logout/', auth_views.LogoutView.as_view(), {'next_page': '/'}, name='logout'),
+    path('', basicapp.views.index), 
+    path('signup/', signup.views.Signup), 
+    path('thanks/', signup.views.thanks), 
+    path('blog/', include('blog.urls')), 
 
 """	
 
-setpath="""
+setpath = """
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR=os.path.join(BASE_DIR,'templates')
 STATIC_DIR=os.path.join(BASE_DIR,'static')
@@ -142,7 +148,7 @@ MEDIA_DIR=os.path.join(BASE_DIR,'media')
 LOGIN_REDIRECT_URL='/'
 """
 
-seturl="""
+seturl = """
 STATIC_URL = '/static/'
 STATIC_ROOT=os.path.join(BASE_DIR,'static')
 STATICFILES_DIR=[STATIC_DIR,]
@@ -150,65 +156,68 @@ MEDIA_ROOT=MEDIA_DIR
 MEDIA_URL='/media/'
 """
 
-setapp="""
+setapp = """
     'django.contrib.staticfiles',
     'basicapp',
     'signup',
     'blog',
 """
 
-blogmodel="""
+blogmodel = """
+
 class Post(models.Model):
-	title=models.CharField(max_length=60)
-	body=models.TextField()
-	created = models.DateTimeField(auto_now_add=True)
-	#author-models.ForeignKey('user.User') 
-	author=models.CharField(default='author',max_length=60)
-	slug=models.CharField(default='author',max_length=60)
+    title = models.CharField(max_length=60)
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    # author-models.ForeignKey('user.User') 
+    author = models.CharField(default='author', max_length=60)
+    slug = models.CharField(default='author', max_length=60)
+    
+    # def approve_comments(self):
+    #   return self.comments.filer(approved_comment=True)
+    # from django.core.urlresolvers import reverse
+    #
+    # def get_absolute_url(self):
+    #   return reverse("post_detail",kwargs={'pk':self.pk})
+    
+    def __uniode__(self):
+        return self.title
+    
+    def __str__(self):  # this needed for display in foreign fields like comment
+        return self.title
 
-	#def approve_comments(self):
-	#        return self.comments.filer(approved_comment=True)
-	#from django.core.urlresolvers import reverse
-	#
-	#def get_absolute_url(self):
-	#        return reverse("post_detail",kwargs={'pk':self.pk})
-
-	def __uniode__(self ):
-		return self.title
-
-	def __str__(self): # this needed for display in foreign fields like comment
-		return self.title
 
 class Comment(models.Model):
-	created = models.DateTimeField(auto_now_add=True)
-	#author=models.CharField(default='author',max_length=60)
-	author=models.ForeignKey('auth.User')
-	body=models.TextField()
-	#post=models.ForeignKey(Post)
-	#post=models.ForeignKey(Post, related_name='comments')
-	post=models.ForeignKey('blog.post', related_name='comments')
-	approved_comment=models.BooleanField(default=False)
-
-	#def approve(self):
-	#        self.approved_comment=True
-	#        self.save()
-	#def get_absolute_url(self):
-	#        return reverse('postcomment',kwargs={'pk':self.pk})
-	def __unicode__(self):
-		return unicode("%s: %s" % (self.post,self.body[:60]))
+    created = models.DateTimeField(auto_now_add=True)
+    # author=models.CharField(default='author',max_length=60)
+    author = models.ForeignKey('auth.User', on_delete=models.DO_NOTHING)
+    body = models.TextField()
+    # post=models.ForeignKey(Post)
+    # post=models.ForeignKey(Post, related_name='comments')
+    post = models.ForeignKey('blog.post', related_name='comments', on_delete=models.DO_NOTHING)
+    approved_comment = models.BooleanField(default=False)
+    
+    # def approve(self):
+    #     self.approved_comment=True
+    #     self.save()
+    # def get_absolute_url(self):
+    #     return reverse('postcomment',kwargs={'pk':self.pk})
+    def __unicode__(self):
+        return unicode("%s: %s" % (self.post,self.body[:60]))
 """
 
-blogforms="""
+blogforms = """
 from django import forms
 from blog.models import Comment
 
+
 class PostComment(forms.ModelForm):
-	class Meta:
-		model=Comment
-		fields = ['body',]
+    class Meta:
+        model = Comment
+        fields = ['body',]
 """
 
-blogviews="""
+blogviews = """
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from blog.models import Post
@@ -219,67 +228,70 @@ from django.contrib.auth.models import User
 from signup.models import Profile
 
 class PostListView(ListView):
-	model=Post
-	paginate_by=3
-	queryset=Post.objects.order_by('-created')
-	#if you don't want queryset you ca add the following to model.
-	#and it only works on date field
-	#nested: class Meta:
-	#                ordering = ['-created']
+    model=Post
+    paginate_by=3
+    queryset=Post.objects.order_by('-created')
+    # if you don't want queryset you ca add the following to model.
+    # and it only works on date field
+    # nested: class Meta:
+    #     ordering = ['-created']
+    
 class PostDetailView(DetailView):
-	model=Post
+    model=Post
 
 
 @login_required
 def PostCommentView(request,pk):
-	user=User.objects.get(pk=pk)
-	myedit=Profile.objects.get(user=user)
-	#print myedit.editor
-	#print myedit.user_id
-	#print user.last_name
-	#print user.approved_comment
-	post = get_object_or_404(Post,pk=pk)
-	if request.method == 'POST':
-		form = PostComment(request.POST)
-		if form.is_valid():
-			comment = form.save(commit=False)
-			comment.post = post
-			comment.author=user
-			comment.save()
-			return redirect('/thanks/')
-			#return redirect('asdf.html',pk=post.pk)
-	else:
-		form = PostComment()
-	return render(request, 'postcomment.html',{'form':form})
+    user=User.objects.get(pk=pk)
+    myedit=Profile.objects.get(user=user)
+    # print myedit.editor
+    # print myedit.user_id
+    # print user.last_name
+    # print user.approved_comment
+    post = get_object_or_404(Post,pk=pk)
+    if request.method == 'POST':
+        form = PostComment(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author=user
+            comment.save()
+            return redirect('/thanks/')
+            #return redirect('asdf.html',pk=post.pk)
+    else:
+        form = PostComment()
+    return render(request, 'postcomment.html',{'form':form})
 
-#def comment_approve(request,pk):
-#    comment = get_object_or_404(Comment,pk=pk)
-#    #comment.approve()
-#    return redirect('post_detail', pk=post.pk)
+# def comment_approve(request,pk):
+#     comment = get_object_or_404(Comment,pk=pk)
+#     # comment.approve()
+#     return redirect('post_detail', pk=post.pk)
 
 """
 
-blogadmin="""
+blogadmin = """
 from blog.models import Comment
 
 # Register your models here.
 
 from blog.models import Post
-class PostAdmin(admin.ModelAdmin):
-	list_display=["title"]
 
+
+class PostAdmin(admin.ModelAdmin):
+    list_display=["title"]
 
 class CommentAdmin(admin.ModelAdmin):
-	def post_name(self,instance):
-		return instance.post.title
-	list_display=["author","post_name" ]
-	search_fields=["post_name"]
+    def post_name(self,instance):
+        return instance.post.title
+    list_display=["author","post_name" ]
+    search_fields=["post_name"]
+
 
 admin.site.register(Post,PostAdmin)
 admin.site.register(Comment,CommentAdmin)
 """
 
-blogurls="""
+blogurls = """
 from django.conf.urls import url, include
 
 from blog.views import PostListView
@@ -287,13 +299,13 @@ from blog.views import PostDetailView
 from blog.views import PostCommentView
 
 urlpatterns = [
-        url(r'^$',PostListView.as_view(), name='post-list'),
-        url(r'^(?P<pk>\d+)/$',PostDetailView.as_view(), name='post-detail'),
-        url(r'^(?P<pk>\d+)/comment/$',PostCommentView,name='postcomment'),
+    url(r'^$',PostListView.as_view(), name='post-list'),
+    url(r'^(?P<pk>\d+)/$',PostDetailView.as_view(), name='post-detail'),
+    url(r'^(?P<pk>\d+)/comment/$',PostCommentView,name='postcomment'),
 ]
 """
 
-postlist="""
+post_list = """
 {% extends 'base.html' %}
 {% block content %}
 <h2>News</h2>
@@ -316,7 +328,7 @@ postlist="""
 {% endblock %}
 """
 
-postdetail="""
+post_detail = """
 {% extends 'base.html' %}
 {% block content %}
 
@@ -343,7 +355,7 @@ postdetail="""
 {% endblock %}
 """
 
-postcomment="""
+post_comment = """
 {% extends 'base.html' %}
 {% block content %}
 
@@ -357,5 +369,5 @@ postcomment="""
 {% endblock %}
 """
 
-if __name__=="__main__":
-	pass
+if __name__ == "__main__":
+    pass
