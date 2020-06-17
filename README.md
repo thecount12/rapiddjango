@@ -23,29 +23,14 @@ needs the six items I listed above. This script saves several hours of work and 
 
 The following needs to be installed:
 
-1. Python2 or Python3
+1. Python3
 2. Pip - This can be done through python easy\_install.
 3. Django. After pip is installed you can run the following:
 	pip install Django
 
 # Installation
 
-Download newrapidsetup.py and mystring.py 
-
-If you run Python3.x. You need to edit the file and change the following:
-
-At the bottom of newrapidsetup.py
-
-Change: ```project=raw_input("Enter your Django Project Name: ")```
-
-To: ```project=input("Enter your Django Project Name: ")```
-
-Near the top of mystring.py
-
-Change: ```myclean=raw_input("Enter name of project to erease: ")```
-
-To: ```myclean=input("Enter name of project to erase: ")```
-
+clone the repo and copy newrapidsetup.py and mystring.py to a preferred directory
 
 # Running the Script
 
@@ -79,7 +64,14 @@ comments can be added using the admin tool or the form.
 
 You can create the same form for the news blog that appears the same for 
 the comments form. It's a matter of creating, a new url, a new view method,
-a new form method, and a new template. 
+a new form method, and a new template.
+
+# settings.md 
+
+This contains some last minute things to change before going live. You can adjust the settings.py and those entries. 
+
+Also I added a few other things to make this heroku compatible. Copy the Procfile over change it to the name of the repo you created. Copy of the req.txt and perhaps rename it to requirements.txt. You might have to create static directory
+and add `load static` to the base.html file. 
 
 # New Models
 
