@@ -81,6 +81,7 @@ from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect, render_to_response
 from signup.forms import SignUpForm
 
+
 def Signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -99,7 +100,7 @@ def Signup(request):
 
 
 def thanks(request):
-    return render_to_response("thanks.html")
+    return render(None, "thanks.html")
         """
         self.write_data('a', view, signup_view)
         my_form = self.project+"/signup/forms.py"

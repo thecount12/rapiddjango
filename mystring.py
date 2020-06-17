@@ -100,11 +100,11 @@ logindata = """
 """
 
 basicview = """
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 
 
 def index(request):
-    return render_to_response("index.html")
+    return render(None, "index.html")
 """
 
 zclean = """
@@ -129,14 +129,14 @@ import signup.views
 """
 
 rooturl = """
-    url(r'^accounts/login/$', auth_views.login, name = 'login'), 
-    # url(r'^logout/$', auth_views.logout, name = 'logout'),# builtin 
-    # url(r'^logout/$', auth_views.logout, {'template_name': 'logged_out.html'}, name = 'logout'),# page redirect 
-    url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name = 'logout'),
-    url(r'^$',basicapp.views.index), 
-    url(r'^signup/$',signup.views.Signup), 
-    url(r'^thanks/$',signup.views.thanks), 
-    url(r'^blog/',include('blog.urls')), 
+    path('accounts/login/', auth_views.LoginView.as_view()), 
+    # url('logout/', auth_views.logout, name = 'logout'),# builtin 
+    # url('logout/', auth_views.logout, {'template_name': 'logged_out.html'}, name = 'logout'),# page redirect 
+    path('logout/', auth_views.LogoutView.as_view(), {'next_page': '/'}, name='logout'),
+    path('', basicapp.views.index), 
+    path('signup/', signup.views.Signup), 
+    path('thanks/', signup.views.thanks), 
+    path('blog/', include('blog.urls')), 
 
 """	
 
@@ -164,13 +164,14 @@ setapp = """
 """
 
 blogmodel = """
+
 class Post(models.Model):
-    title=models.CharField(max_length=60)
-    body=models.TextField()
+    title = models.CharField(max_length=60)
+    body = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     # author-models.ForeignKey('user.User') 
-    author=models.CharField(default='author',max_length=60)
-    slug=models.CharField(default='author',max_length=60)
+    author = models.CharField(default='author', max_length=60)
+    slug = models.CharField(default='author', max_length=60)
     
     # def approve_comments(self):
     #   return self.comments.filer(approved_comment=True)
@@ -179,21 +180,22 @@ class Post(models.Model):
     # def get_absolute_url(self):
     #   return reverse("post_detail",kwargs={'pk':self.pk})
     
-    def __uniode__(self ):
+    def __uniode__(self):
         return self.title
     
-    def __str__(self): # this needed for display in foreign fields like comment
+    def __str__(self):  # this needed for display in foreign fields like comment
         return self.title
+
 
 class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     # author=models.CharField(default='author',max_length=60)
-    author=models.ForeignKey('auth.User')
-    body=models.TextField()
+    author = models.ForeignKey('auth.User', on_delete=models.DO_NOTHING)
+    body = models.TextField()
     # post=models.ForeignKey(Post)
     # post=models.ForeignKey(Post, related_name='comments')
-    post=models.ForeignKey('blog.post', related_name='comments')
-    approved_comment=models.BooleanField(default=False)
+    post = models.ForeignKey('blog.post', related_name='comments', on_delete=models.DO_NOTHING)
+    approved_comment = models.BooleanField(default=False)
     
     # def approve(self):
     #     self.approved_comment=True
@@ -211,7 +213,7 @@ from blog.models import Comment
 
 class PostComment(forms.ModelForm):
     class Meta:
-        model=Comment
+        model = Comment
         fields = ['body',]
 """
 
