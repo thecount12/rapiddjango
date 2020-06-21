@@ -24,17 +24,16 @@ make sure staticfiles, sites, and flatpages are added
 
 ```
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
     'django.contrib.sites',
     'django.contrib.flatpages',
 ]
 ```
+
+Don't forget SITE_ID = 1
+
+Add entry to urls.py
+`path('pages/', include('django.contrib.flatpages.urls')),
+
 
 
 ## settings.py 
