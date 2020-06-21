@@ -24,13 +24,13 @@ needs the six items I listed above. This script saves several hours of work and 
 The following needs to be installed:
 
 1. Python3
-2. Pip - This can be done through python easy\_install.
+2. Pip - This can be done through python easy\_install. Brew, yum or apt. I believe the pacakge is python3-pip
 3. Django. After pip is installed you can run the following:
 	pip install Django
 
 # Installation
 
-clone the repo and copy newrapidsetup.py and mystring.py to a preferred directory
+Clone the repo and copy newrapidsetup.py and mystring.py to a preferred directory
 
 # Running the Script
 
@@ -65,6 +65,9 @@ comments can be added using the admin tool or the form.
 You can create the same form for the news blog that appears the same for 
 the comments form. It's a matter of creating, a new url, a new view method,
 a new form method, and a new template.
+
+This can be changed easily. I have an example of how to create a blog from scratch called blog.md. You could create a new field called authorized. If the user is logged in and authorized. you could give them permission to add a blog or create comments. 
+I would suggest creating something simple like a movie database or book database and test how a user can work with the new model and make changes at a user level.
 
 # settings.md 
 
