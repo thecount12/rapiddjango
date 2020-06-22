@@ -325,6 +325,9 @@ python manage.py migrate
 python manage.py sqlmigrate blog 0001 or use the appropriate item in number 000x. You 
 can find the results of the alter query in migrations directory /blog/migrations
 
+if the table you created already exists you can fake the migration
+ex: `python manage.py migrate --fake blog`
+
 author.models.ForeignKey('author.User')
 
 ## forms.py
